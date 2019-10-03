@@ -5,10 +5,7 @@ struct TennisBall {
 	boolean frontBack;
 	double bearing; // from straight ahead
 	double distance;
-	double tagBearing; // angle the tag is facing
-	boolean found2;
-	boolean frontBack2;
-	double bearing2; // from straight ahead for second post
-	double distance2;
-	double tagBearing2; // angle the tag is facing for second post
+	double tagBearing; // angle the tag is facing relative to the rover
 }
+
+pair<TennisBall, TennisBall>
