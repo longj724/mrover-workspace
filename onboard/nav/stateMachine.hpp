@@ -34,7 +34,7 @@ public:
 
     void updateRoverStatus( Odometry odometry );
 
-    void updateRoverStatus( TennisBall tennisBall );
+    void updateRoverStatus( TargetList targetList );
 
     void updateCompletedPoints( );
 
