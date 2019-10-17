@@ -11,6 +11,7 @@
 #include "rover_msgs/Odometry.hpp"
 #include "rover_msgs/TennisBall.hpp"
 #include "rover_msgs/Waypoint.hpp"
+#include "rover_msgs/Gate.hpp"
 #include "rapidjson/document.h"
 #include "pid.hpp"
 
@@ -66,7 +67,8 @@ public:
             Course courseIn,
             Obstacle obstacleIn,
             Odometry odometryIn,
-            TennisBall tennisBallIn
+            TennisBall tennisBallIn,
+            TennisBall tennisBall2In
             );
 
         NavState& currentState();
@@ -115,6 +117,10 @@ public:
 
         // Total tennis balls to seach for in the course
         unsigned mPathTennisBalls;
+
+        // The rover's current gate information from computer
+        // vision.
+        bool mGate;
 
     };
 

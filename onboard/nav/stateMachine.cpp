@@ -251,9 +251,10 @@ void StateMachine::updateRoverStatus( Odometry odometry )
 } // updateRoverStatus( Odometry )
 
 // Updates the tennis ball information of the rover's status.
-void StateMachine::updateRoverStatus( TennisBall tennisBall )
+void StateMachine::updateRoverStatus( TargetList targetList )
 {
-    mNewRoverStatus.tennisBall() = tennisBall;
+    TennisBall tennisBall1 = targetList.targetList[0];
+    mNewRoverStatus.tennisBall() = tennisBall1;
 } // updateRoverStatus( TennisBall )
 
 // Return true if we want to execute a loop in the state machine, false
