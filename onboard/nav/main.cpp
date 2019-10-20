@@ -56,7 +56,7 @@ public:
         mStateMachine->updateRoverStatus( *odometry );
     }
 
-    // Sends the tennis ball lcm message to the state machine.
+    // Sends the target lcm message to the state machine.
     void targetList(
         const lcm::ReceiveBuffer* receiveBuffer,
         const string& channel,
@@ -88,7 +88,7 @@ int main()
     lcmObject.subscribe( "/course", &LcmHandlers::course, &lcmHandlers );
     lcmObject.subscribe( "/obstacle", &LcmHandlers::obstacle, &lcmHandlers );
     lcmObject.subscribe( "/odometry", &LcmHandlers::odometry, &lcmHandlers );
-    lcmObject.subscribe( "/tennis_ball", &LcmHandlers::targetList, &lcmHandlers );
+    lcmObject.subscribe( "/target_list", &LcmHandlers::targetList, &lcmHandlers );
 
     while( lcmObject.handle() == 0 )
     {
