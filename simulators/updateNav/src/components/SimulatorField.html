@@ -22,7 +22,7 @@ const EARTH_RAD = 6371000.0;
 const ROVER_SIZE_M = 1;
 const VECTOR_SIZE_M = .75;
 const WAYPOINT_SIZE = 10;
-const AR_TAG_SIZE = {w: 8, h: 10};
+const AR_TAG_SIZE = 1;
 const ROCK_SIZE_M = 1.2;
 const ROVER_FIELD_OF_VIEW = 2*Math.PI/3;
 const ROVER_DEPTH_OF_VIEW = 10;
@@ -52,10 +52,10 @@ export default {
 
             ar_tag_state: {
                 found: false,
+                frontBack: false,
                 bearing: 0,
                 distance: 0,
-                tag_direction: 0,
-                facing_rover: false
+                tagBearing: 0
             },
 
             obstacle_state: {
@@ -83,15 +83,14 @@ export default {
             let tag_detected_idx = -1;
             let ar_tag_state = {
                 found: false,
+                frontBack: false,
                 bearing: 0,
                 distance: 0,
-                tag_direction: 0,
-                facing_rover: false
+                tagBearing: 0
             };
 
             for (let i = 0; i < ar_tags.length; i++) {
                 ar_tags[i].detected = false;
-                console.log("tag", ar_tags[i]);
                 const { dist, bearing } = dist_and_bearing(
                     to_decimal(odom), to_decimal(ar_tags[i]));
                 const rover_bearing = odom.bearing_deg * Math.PI/180;
@@ -100,18 +99,18 @@ export default {
                 if (Math.abs(bearing - rover_bearing) < ROVER_FIELD_OF_VIEW/2 && dist < ROVER_DEPTH_OF_VIEW) {
                     ar_tags[i].detected = true;
                     tag_detected_idx = i;
-                    console.log(ar_tags[i].tag_direction);
-                    let is_facing_rover = Math.abs(ar_tags[i].tag_direction - rover_bearing + 180);
-                    console.log("direction", rover_bearing)
-                    console.log("bool", is_facing_rover);
+                    
+                    let is_facing_rover = Math.abs(ar_tags[i].tag_direction - odom.bearing_deg);
+                    let test = (is_facing_rover >= 135 && is_facing_rover <= 225)
+                    console.log("facing", is_facing_rover, " ", test);
                     ar_tag_state = {
                         found: true,
+                        frontBack: test,
                         bearing: (bearing - rover_bearing) * 180/Math.PI,
                         distance: dist,
-                        tag_direction: ar_tags[i].tag_direction,
-                        facing_rover: is_facing_rover
+                        tagBearing: 0
                     };
-                    console.log("here", ar_tag_state.facing_rover, is_facing_rover);
+
                     break;
                 }
             }
@@ -351,22 +350,22 @@ export default {
                 const tag = ar_tags[i];
                 const bcoords = this.to_canvas(this.projection(to_decimal(tag)));
 
-                const direction = tag.tag_direction;
+                const bearing = (-tag.tag_direction) * Math.PI / 180;
 
-                ctx.fillStyle = 'black';
-                if( 90 < direction && direction <= 270 ) 
-                {
-                    ctx.fillStyle = "white"
-                }
-                
                 ctx.strokeStyle = 'black';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 5;
                 ctx.beginPath();
-                ctx.fillRect(bcoords.x - AR_TAG_SIZE.w/2,
-                             bcoords.y - AR_TAG_SIZE.h/2,
-                             AR_TAG_SIZE.w - Math.abs(Math.sin(direction * (Math.PI/180))) * 6,
-                             AR_TAG_SIZE.h);
-                ctx.fill();
+                ctx.moveTo(bcoords.x, bcoords.y);
+                ctx.lineTo(bcoords.x + AR_TAG_SIZE*x_scale*Math.cos(bearing),
+                           bcoords.y - AR_TAG_SIZE*y_scale*Math.sin(bearing));
+                ctx.stroke();
+
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(bcoords.x - 2.5*Math.sin(bearing), bcoords.y - 2.5*Math.cos(bearing));
+                ctx.lineTo(bcoords.x - 2.5*Math.sin(bearing) + AR_TAG_SIZE*x_scale*Math.cos(bearing),
+                           bcoords.y - 2.5*Math.cos(bearing) - AR_TAG_SIZE*y_scale*Math.sin(bearing));
                 ctx.stroke();
             }
 
