@@ -76,11 +76,11 @@ app.on("auton", (auton) => {
     }
 })
 
-// TODO: Update lcm to match AR Tag / Gate lcm
 app.on("ar_tag", (ar_tag) => {
     if (bridge.online) {
-        ar_tag.type = 'TennisBall';
-        bridge.publish("/tennis_ball", ar_tag);
+        ar_tag.type = 'Target';
+        // targets.type = 'TargetList';
+        bridge.publish("/target", ar_tag);
     }
 })
 app.on("obstacle", (obstacle) => {

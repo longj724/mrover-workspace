@@ -51,10 +51,9 @@ export default {
             rocks: [],
 
             ar_tag_state: {
-                found: false,
                 frontBack: false,
                 bearing: 0,
-                distance: 0,
+                distance: -1,
                 tagBearing: 0
             },
 
@@ -82,10 +81,9 @@ export default {
 
             let tag_detected_idx = -1;
             let ar_tag_state = {
-                found: false,
                 frontBack: false,
                 bearing: 0,
-                distance: 0,
+                distance: -1,
                 tagBearing: 0
             };
 
@@ -104,7 +102,6 @@ export default {
                     let test = (is_facing_rover >= 135 && is_facing_rover <= 225)
                     console.log("facing", is_facing_rover, " ", test);
                     ar_tag_state = {
-                        found: true,
                         frontBack: test,
                         bearing: (bearing - rover_bearing) * 180/Math.PI,
                         distance: dist,
@@ -404,8 +401,10 @@ export default {
             } else if (draw_mode === AR_TAG_MODE) {
                 let ar_tags = this.get("ar_tags");
                 const tag_angle = this.get("tag_facing");
-                ar_tags.push(to_dms({lat, lon}));
-                ar_tags[ar_tags.length-1].tag_direction = tag_angle;
+                ar_tags.push(
+                    Object.assign({}, to_dms({lat, lon}), { tag_direction: tag_angle})
+                );
+                // ar_tags[ar_tags.length-1].tag_direction = tag_angle;
 
                 this.set({ ar_tags });
             } else if (draw_mode === ROCK_MODE) {
