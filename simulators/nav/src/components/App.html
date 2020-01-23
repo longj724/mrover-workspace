@@ -27,6 +27,7 @@
             <!-- <label for="input-fileName"></label> -->
             <input type="text" class="form-control" id="input-filename" value="textFile" placeholder="Enter file name">
             <input type="button" id="dwn-btn" value="Download"/>
+            <input type="button" id="reset-btn" value="Reset"/>
         </p>
 
     </div>
@@ -136,7 +137,7 @@
     import SimulatorField from './SimulatorField.html';
     import DrawModeSelector from './DrawModeSelector.html';
     import SimulatedItemDisplay from './SimulatedItemDisplay.html';
-    import { WAYPOINT_MODE, ROCK_MODE, AR_TAG_MODE } from "../constants.js";
+    import { WAYPOINT_MODE, ROCK_MODE, AR_TAG_MODE, RESET_BUTTON_MODE } from "../constants.js";
     import { to_dms } from '../geography.js';
 
     const NUM_DIGITS = 7;
@@ -146,6 +147,7 @@
         oncreate() {
             document.getElementById('files').addEventListener('change', this.handleFileSelect);
             document.getElementById('dwn-btn').addEventListener('click', this.handleDownloadTest);
+            document.getElementById('reset-btn').addEventListener('click', this.handleResetData);
             app = this;
         },
 
@@ -215,6 +217,7 @@
                         console.log(inputData);
                         var testCaseData = JSON.parse(inputData);
                         app.set(testCaseData);
+                        console.log('Test case data is: ', testCaseData)
                         console.log(app)
                     };
                 })(files[0]);
@@ -228,6 +231,11 @@
                                                     4)
                 var filename = document.getElementById('input-filename').value + ".json";
                 download(filename, test_case_data);
+            },
+
+            handleResetData: function (event) {
+                console.log('Called the function')
+                completed_wps: 100;
             },
 
             apply_joystick: function(stick) {
