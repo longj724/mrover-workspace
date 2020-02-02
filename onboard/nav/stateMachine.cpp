@@ -345,7 +345,7 @@ NavState StateMachine::executeDrive()
     const Waypoint& nextWaypoint = mPhoebe->roverStatus().path().front();
     double distance = estimateNoneuclid( mPhoebe->roverStatus().odometry(), nextWaypoint.odom );
 
-    if( isObstacleDetected() && !isWaypointReachable( distance ) )
+    if( isObstacleDetected(mPhoebe) && !isWaypointReachable( distance ) )
     {
         mObstacleAvoidanceStateMachine->updateObstacleElements( getOptimalAvoidanceAngle(), getOptimalAvoidanceDistance() );
         return NavState::TurnAroundObs;
@@ -399,10 +399,10 @@ string StateMachine::stringifyNavState() const
 } // stringifyNavState()
 
 // Returns true if an obstacle is detected, false otherwise.
-bool StateMachine::isObstacleDetected() const
-{
-    return mPhoebe->roverStatus().obstacle().detected;
-} // isObstacleDetected()
+// bool StateMachine::isObstacleDetected() const
+// {
+//     return mPhoebe->roverStatus().obstacle().detected;
+//} // isObstacleDetected()
 
 // Returns the optimal angle to avoid the detected obstacle.
 double StateMachine::getOptimalAvoidanceAngle() const

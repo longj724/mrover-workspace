@@ -72,7 +72,7 @@ private:
 
     string stringifyNavState() const;
 
-    bool isObstacleDetected() const;
+    // bool isObstacleDetected( Rover) const;
 
     double getOptimalAvoidanceAngle() const;
 
